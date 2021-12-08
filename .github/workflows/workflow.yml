@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@main
-    - uses: jakejarvis/s3-sync-action@main
+    - uses: 464318846138.signin.aws.amazon.com/console
       with:
         args: --acl public-read --follow-symlinks --delete
       env:
