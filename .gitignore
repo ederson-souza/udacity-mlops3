@@ -130,3 +130,4 @@ dmypy.json
 
 aws/
 awscliv2.zip
+/data
