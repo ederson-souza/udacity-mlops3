@@ -50,7 +50,7 @@ logger.info("Training the model.")
 # Train and save a model.
 model = train_model(X_train, y_train)
 logger.info("Model saved.")
-dump(model, 'model.joblib')
+dump(model, '../model/model.joblib')
 
 # Get predictions.
 logger.info("Get predictions.")
