@@ -18,7 +18,7 @@ def data():
     PATH = "data/census.csv"
     
     assert os.path.exists(
-        os.ptah.join(os.getcwd(), PATH)
+        os.path.join(os.getcwd(), PATH)
         ), f"Path doesn't exist. Please, verify."
 
     df = load_data(PATH)
