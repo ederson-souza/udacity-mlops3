@@ -32,7 +32,7 @@ jobs:
     - uses: iterative/setup-cml@v1
     - name: Pull data
       run: |
-        if [ -f data.dvc ]; dvc pull; fi
+        if [ -f data.dvc ]; then dvc pull; fi
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
