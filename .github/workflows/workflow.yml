@@ -30,7 +30,7 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         pip install dvc[s3]
-    - uses: iterative/setup-cml@v1
+    - uses: iterative/setup-dvc@v1
     - name: Pull data
       run: |
         if [ -f data.dvc ]; then dvc pull; fi
