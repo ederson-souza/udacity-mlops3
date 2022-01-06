@@ -5,7 +5,7 @@ import pandas as pd
 from joblib import dump
 from sklearn.model_selection import train_test_split
 
-from ml.data import process_data
+from ml.data import process_data, load_data
 from ml.model import compute_model_metrics, inference, train_model
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)-15s %(message)s")
@@ -14,7 +14,8 @@ logger = logging.getLogger()
 
 # Add code to load in the data.
 logger.info("Reading data.")
-data = pd.read_csv("../data/census.csv")
+data = load_data("../data/census.csv")
+print(data.shape)
 
 # Optional enhancement, use K-fold cross validation instead of a train-test split.
 logger.info("Spliting data.")
