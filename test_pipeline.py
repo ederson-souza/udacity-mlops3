@@ -8,7 +8,7 @@ from pipeline.ml.data import load_data
 logging.basicConfig(level=logging.INFO, format="%(asctime)-15s %(message)s")
 logger = logging.getLogger()
 
-PATH = "../data/census.csv"
+PATH = "data/census.csv"
 
 @pytest.fixture
 def data(PATH):
