@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
     - uses: jakejarvis/s3-sync-action@master
       with:
         args: --exclude '.git*/*'
@@ -24,7 +24,6 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         if [ -f data.dvc ]; then dvc pull --run-cache; fi  
     
-    - uses: actions/checkout@v2
     - name: Set up Python 3.8
       uses: actions/setup-python@v2
       with:
