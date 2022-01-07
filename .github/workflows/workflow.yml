@@ -13,23 +13,14 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    
-    - uses: iterative/setup-dvc@v1
 
+    - name: Set up Python 3.8
     - uses: actions/setup-python@v2
       with:
         python-version: 3.8
     
-    - uses: jakejarvis/s3-sync-action@master
-      with:
-        args: --exclude '.git*/*'
-      env:
-        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_REGION: 'us-east-1'   # optional: defaults to us-east-1
-
-    - run: |
+    - name: Install dependencies
+      run: |
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         
@@ -40,7 +31,25 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     
+    - name: Setup DVC
+      uses: iterative/setup-dvc@v1
+      
+    - name: Pull data from DVC
+      run: |
+        dvc remote add -d s3_bucket s3://udacity-mlops-proj3
+        dvc pull
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        args: --exclude '.git*/*'
+      env:
+        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: 'us-east-1'  
+
+
     - name: Test with pytest
       run: |
-        if [ -f data.dvc ]; then dvc pull; fi  
         pytest
