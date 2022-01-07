@@ -31,13 +31,6 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     
-    - name: Setup DVC
-      uses: iterative/setup-dvc@v1
-      
-    - name: Pull data from DVC
-      run: |
-        dvc pull
-
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -48,6 +41,12 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_REGION: 'us-east-1'  
 
+    - name: Setup DVC
+      uses: iterative/setup-dvc@v1
+      
+    - name: Pull data from DVC
+      run: |
+        dvc pull
 
     - name: Test with pytest
       run: |
