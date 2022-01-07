@@ -36,7 +36,6 @@ jobs:
       
     - name: Pull data from DVC
       run: |
-        dvc remote add -d s3_bucket s3://udacity-mlops-proj3
         dvc pull
 
     - name: Configure AWS Credentials
