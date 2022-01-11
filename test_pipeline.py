@@ -3,12 +3,12 @@ import logging
 import pytest
 import os
 import yaml
-from pipeline.ml.data import load_data, process_data
-from pipeline.ml.model import train_model
+from ml.data import load_data, process_data
+from ml.model import train_model
 from sklearn.model_selection import train_test_split
 
 
-with open("config.yml", "r") as config:
+with open("config.yaml", "r") as config:
     cfg = yaml.safe_load(config)
 
 
@@ -83,11 +83,16 @@ def test_model_training(split_data):
     assert encoder is not None, "Error spliting data. Encoder not created."
     assert lb is not None, "Error spliting data. Label Encoder not created."
 
-    model = train_model(X_train, y_train, cfg["model"], 'pipeline/ml/' + cfg["main"]["model_path"])
+    model = train_model(
+        X_train=X_train, 
+        y_train=y_train, 
+        model_params=cfg["model"], 
+        model_path=cfg["main"]["model_path"]
+    )
     
     
 
 
 def test_is_model_saved():
     """ Checks if the model has been saved """
-    assert os.path.exists('pipeline/ml/' + cfg["main"]["model_path"])
+    assert os.path.exists(cfg["main"]["model_path"])
