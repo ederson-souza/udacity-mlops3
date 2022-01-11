@@ -1,5 +1,6 @@
 # Script to train machine learning model.
 import logging
+import yaml
 import numpy as np
 import pandas as pd
 from joblib import dump
@@ -11,11 +12,12 @@ from ml.model import compute_model_metrics, inference, train_model
 logging.basicConfig(level=logging.INFO, format="%(asctime)-15s %(message)s")
 logger = logging.getLogger()
 
+with open("../config.yml", "r") as config_yaml:
+    cfg = yaml.safe_load(config_yaml)
 
 # Add code to load in the data.
 logger.info("Reading data.")
-data = load_data("../data/census.csv")
-print(data.shape)
+data = load_data(f'../{cfg["data_path"]}')
 
 # Optional enhancement, use K-fold cross validation instead of a train-test split.
 logger.info("Spliting data.")
