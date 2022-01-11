@@ -43,5 +43,5 @@ def test_data(data):
     assert data is not None, "No data was loaded."
     assert data.shape[0] > 0, "Testing import_data: The file doesn't appear to have rows."
     
-    # Check column presence
+    # Check columns
     assert set(data.columns.values).issuperset(set(required_columns.keys())), "Columns doesn't match."
