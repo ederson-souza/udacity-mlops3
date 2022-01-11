@@ -3,7 +3,7 @@ import logging
 import yaml
 import numpy as np
 import pandas as pd
-from joblib import dump
+
 from sklearn.model_selection import train_test_split
 
 from ml.data import process_data, load_data
@@ -17,11 +17,15 @@ with open("../config.yml", "r") as config_yaml:
 
 # Add code to load in the data.
 logger.info("Reading data.")
-data = load_data(f'../{cfg["data_path"]}')
+data = load_data(f'../{cfg["main"]["data_path"]}')
 
 # Optional enhancement, use K-fold cross validation instead of a train-test split.
 logger.info("Spliting data.")
-train, test = train_test_split(data, test_size=0.20)
+train, test = train_test_split(
+    data, 
+    test_size=cfg["main"]["test_size"], 
+    random_state=cfg["main"]["random_seed"]
+)
 
 cat_features = [
     "workclass",
@@ -51,9 +55,10 @@ X_test, y_test, encoder, lb = process_data(
 
 logger.info("Training the model.")
 # Train and save a model.
-model = train_model(X_train, y_train)
-logger.info("Model saved.")
-dump(model, '../model/model.joblib')
+model = train_model(X_train, y_train, cfg["model"], cfg["main"]["model_path"])
+
+logger.info("Saving model.")
+
 
 # Get predictions.
 logger.info("Get predictions.")
