@@ -44,4 +44,4 @@ def test_data(data):
     assert data.shape[0] > 0, "Testing import_data: The file doesn't appear to have rows."
     
     # Check columns
-    assert set(data.columns.values).issuperset(set(required_columns.keys())), "Columns doesn't match."
+    assert set(data.columns.values).issuperset(set(required_columns)), "Columns doesn't match."
