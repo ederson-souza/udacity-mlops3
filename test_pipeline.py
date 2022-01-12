@@ -11,14 +11,6 @@ from sklearn.model_selection import train_test_split
 with open("config.yaml", "r") as config:
     cfg = yaml.safe_load(config)
 
-
-logging.basicConfig(
-    filename='./pipeline.log',
-    level=logging.INFO,
-    filemode='a',
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-
-
 @pytest.fixture
 def data():
     """ 
@@ -26,9 +18,10 @@ def data():
     """
     PATH = cfg["main"]["data_path"]
 
-    assert os.path.exists(
+    if not os.path.exists(
         os.path.join(os.getcwd(), PATH)
-    ), f"Path doesn't exist. Please, verify."
+    ):
+        pytest.fail("Path doesn't exist. Please, verify.")
 
     df = load_data(PATH)
 
@@ -43,11 +36,15 @@ def test_data(data):
                'sex', 'capital-gain', 'capital-loss', 'hours-per-week',
                'native-country', 'salary']
 
-    assert data is not None, "No data was loaded."
-    assert data.shape[0] > 0, "Testing import_data: The file doesn't appear to have rows."
+    if data is None:
+        pytest.fail("No data was loaded.")
+
+    if data.shape[0] == 0: 
+        pytest.fail("Testing import_data: The file doesn't appear to have rows.")
     
     # Check columns
-    assert set(data.columns.values).issuperset(set(required_columns)), "Columns doesn't match."
+    if not set(data.columns.values).issuperset(set(required_columns)): 
+        pytest.fail("A Feature is missing.")
 
 @pytest.fixture
 def split_data(data):
@@ -77,11 +74,14 @@ def test_model_training(split_data):
                                         label="salary", 
                                         training=True
                                         )
-    
-    assert X_train is not None, "Error spliting data. No X_train data."
-    assert y_train is not None, "Error spliting data. No y_train data."
-    assert encoder is not None, "Error spliting data. Encoder not created."
-    assert lb is not None, "Error spliting data. Label Encoder not created."
+    if X_train is None:
+        pytest.fail("Error spliting data. No X_train data.")
+    if y_train is None:
+        pytest.fail("Error spliting data. No y_train data.")
+    if encoder is None:
+        pytest.fail("Error spliting data. Encoder not created.")
+    if lb is None:
+        pytest.fail("Error spliting data. Label Encoder not created.")     
 
     model = train_model(
         X_train=X_train, 
@@ -90,9 +90,8 @@ def test_model_training(split_data):
         model_path=cfg["main"]["model_path"]
     )
     
-    
-
 
 def test_is_model_saved():
     """ Checks if the model has been saved """
-    assert os.path.exists(cfg["main"]["model_path"])
+    if not os.path.exists(cfg["main"]["model_path"]):
+        pytest.fail("Model was not saved.")
