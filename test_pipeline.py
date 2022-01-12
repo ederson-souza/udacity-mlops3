@@ -1,12 +1,11 @@
 import pandas as pd
-import logging
+import hydra
 import pytest
 import os
 import yaml
 from ml.data import load_data, process_data
 from ml.model import train_model
 from sklearn.model_selection import train_test_split
-
 
 with open("config.yaml", "r") as config:
     cfg = yaml.safe_load(config)

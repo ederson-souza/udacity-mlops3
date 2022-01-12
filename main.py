@@ -13,8 +13,6 @@ logging.basicConfig(
 # This automatically reads in the configuration
 @hydra.main(config_name='config')
 def main(cfg):
-    print(cfg)
-
 
     # You can get the path at the root of the MLflow project with this:
     root_path = hydra.utils.get_original_cwd()
