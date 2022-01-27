@@ -17,13 +17,13 @@ def test_predict_1():
         "age": 20,
         "workclass": "Private",
         "education": "HS-grad",
-        "marital_status": "Never-married",
+        "marital-status": "Never-married",
         "occupation": "lawyer",
         "relationship": "single",
         "race": "white",
         "sex": "male",
-        "hours_per_week": 40,
-        "native_country": "United States"
+        "hours-per-week": 40,
+        "native-country": "United States"
     }
 
     connect = home.post('/salary/', json=data1)
