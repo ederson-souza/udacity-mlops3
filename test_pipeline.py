@@ -16,13 +16,14 @@ def data():
     Load data for testing.
     """
     PATH = cfg["main"]["data_path"]
+    FEATURES = cfg["main"["features"]]
 
     if not os.path.exists(
         os.path.join(os.getcwd(), PATH)
     ):
         pytest.fail("Path doesn't exist. Please, verify.")
 
-    df = load_data(PATH)
+    df = load_data(PATH, FEATURES)
 
     return df
 

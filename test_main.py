@@ -14,9 +14,16 @@ def test_index():
 
 def test_predict_1():
     data1 = {
+        "age": 20,
         "workclass": "Private",
         "education": "HS-grad",
         "marital_status": "Never-married",
+        "occupation": "lawyer",
+        "relationship": "single",
+        "race": "white",
+        "sex": "male",
+        "hours_per_week": 40,
+        "native_country": "United States"
     }
 
     connect = home.post('/salary/', json=data1)
