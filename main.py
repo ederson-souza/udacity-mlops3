@@ -17,7 +17,7 @@ class Subject(BaseModel):
     relationship: str
     race: str
     sex: str
-    hours_per_week: str = Field(alias='hours-per-week')
+    hours_per_week: int = Field(alias='hours-per-week')
     native_country: str = Field(alias='native-country')
     
 
