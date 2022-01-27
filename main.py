@@ -1,83 +1,33 @@
-import os
-import logging
-import hydra
-from ml.data import load_data, process_data
-from ml.model import compute_model_metrics, inference, train_model
-from sklearn.model_selection import train_test_split
+# Import Union since our Item object will have tags that can be strings or a list.
+from typing import Union 
+from fastapi import FastAPI
+from fastapi.encoders import jsonable_encoder
 
-logging.basicConfig(
-    level=logging.INFO,
-    filemode='a',
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+# BaseModel from Pydantic is used to define data objects.
+from pydantic import BaseModel, Field
+from sqlalchemy import alias
 
-# This automatically reads in the configuration
-@hydra.main(config_name='config')
-def main(cfg):
+# Declare the data object with its components and their type.
+class Subject(BaseModel):
+    age: int
+    workclass: str
+    education: str
+    marital_status: str = Field(alias='marital-status')
+    occupation: str
+    relationship: str
+    race: str
+    sex: str
+    hours_per_week: str = Field(alias='hours-per-week')
+    native_country: str = Field(alias='native-country')
+    
 
-    # You can get the path at the root of the MLflow project with this:
-    root_path = hydra.utils.get_original_cwd()
+app = FastAPI()
 
-    # Add code to load in the data.
-    logging.info("Reading data.")
-    data = load_data(os.path.join(root_path, cfg.main.data_path))
+# This allows sending of data (our TaggedItem) via POST to the API.
+@app.post("/salary/")
+async def predict_salary(data: Subject):
+    return jsonable_encoder(data)
 
-    # Optional enhancement, use K-fold cross validation instead of a train-test split.
-    logging.info("Spliting data.")
-    train, test = train_test_split(
-        data, 
-        test_size=cfg.main.test_size,
-        random_state=cfg.main.random_seed
-    )
-
-    cat_features = [
-        "workclass",
-        "education",
-        "marital-status",
-        "occupation",
-        "relationship",
-        "race",
-        "sex",
-        "native-country",
-    ]
-    logging.info("Processing data.")
-    X_train, y_train, encoder, lb = process_data(
-        train, categorical_features=cat_features, label="salary", training=True
-    )
-
-    # Process the test data with the process_data function.
-    X_test, y_test, encoder, lb = process_data(
-        X=test, 
-        categorical_features=cat_features, 
-        label="salary", 
-        training=False,
-        encoder=encoder,
-        lb=lb
-
-    )
-
-    logging.info("Training the model.")
-    # Train and save a model.
-    model = train_model(
-        X_train=X_train, 
-        y_train=y_train, 
-        model_params=cfg.model, 
-        model_path=os.path.join(root_path, cfg.main.model_path)
-        )
-
-    logging.info("Saving model.")
-
-
-    # Get predictions.
-    logging.info("Get predictions.")
-    preds = inference(model, X_test)
-
-    # Get model metrics.
-    precision, recall, f_beta = compute_model_metrics(y_test, preds)
-    logging.info(
-        f"Model Metrics: Precision {precision:.3f}, Recall {recall:.3f}, F_Beta {f_beta:.3f}"
-    )
-
-
-
-if __name__ == "__main__":
-    main()
+@app.get("/")
+async def greetings():
+    return {"Welcome to the Salary Predictor"}

@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.preprocessing import LabelBinarizer, OneHotEncoder
 
 
-def load_data(path_to_data):
+def load_data(path_to_data, features):
     """
     Loads data from a .csv file.
     Inputs
@@ -11,7 +11,9 @@ def load_data(path_to_data):
     path_to_data : str
         Path to the .csv file.
     """
-    return pd.read_csv(path_to_data)
+    data = pd.read_csv(path_to_data)
+
+    return data.loc[:,features]
 
 
 

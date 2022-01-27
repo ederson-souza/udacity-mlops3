@@ -30,10 +30,9 @@ def data():
 def test_data(data):
     """ Basic data testing. """
 
-    required_columns = ['age', 'workclass', 'fnlgt', 'education', 'education-num',
-               'marital-status', 'occupation', 'relationship', 'race',
-               'sex', 'capital-gain', 'capital-loss', 'hours-per-week',
-               'native-country', 'salary']
+    required_columns = ['age', 'workclass', 'education','marital-status', 
+                        'occupation', 'relationship', 'race', 'sex', 
+                        'hours-per-week', 'native-country', 'salary']
 
     if data is None:
         pytest.fail("No data was loaded.")

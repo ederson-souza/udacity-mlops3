@@ -2,6 +2,9 @@ main:
   data_path: data/census.csv
   model_path: model/model.joblib
   test_size: 0.3
+  features: ['age', 'workclass', 'education','marital-status', 
+             'occupation', 'relationship', 'race', 'sex', 
+             'hours-per-week', 'native-country', 'salary']
   random_seed: 2022
 model:
   n_estimators: 5000
